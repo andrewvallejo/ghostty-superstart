@@ -8,12 +8,14 @@
 SKIP_ZSH=false
 SKIP_GHOSTTY=false
 SKIP_VSCODE=false
+SKIP_P10K=false
 
 for arg in "$@"; do
   case $arg in
     --skip-zsh) SKIP_ZSH=true ;;
     --skip-ghostty) SKIP_GHOSTTY=true ;;
     --skip-vscode) SKIP_VSCODE=true ;;
+    --skip-p10k) SKIP_P10K=true ;;
   esac
 done
 
@@ -38,6 +40,21 @@ if [ "$SKIP_ZSH" = false ]; then
   fi
 else
   echo "Skipping Zsh setup (--skip-zsh)."
+fi
+
+# ───────────────────────────────
+# Powerlevel10k Config (create/overwrite)
+# ───────────────────────────────
+if [ "$SKIP_P10K" = true ]; then
+  echo "Skipping Powerlevel10k setup (--skip-p10k)."
+else
+  P10K_FILE="$HOME/.p10k.zsh"
+  if [ -f "$P10K_FILE" ]; then
+    echo "Backing up existing Powerlevel10k config..."
+    cp "$P10K_FILE" "$P10K_FILE.bak"
+  fi
+  echo "Installing Powerlevel10k configuration..."
+  cp ./p10k.zsh "$P10K_FILE"
 fi
 
 # ───────────────────────────────
